@@ -64,7 +64,7 @@ const dijksta = (graph) => {
   let countTrack = 0; 
 
 
-  while(visited.length!==5){
+  while(visited.length!==Object.entries(graph).length){
     if(countTrack===0){
       selectedNode='start';
       weights[selectedNode] = 0;
