@@ -24,14 +24,41 @@ var parentMap = {};
 //calulateShortest()
 //Dijkstras()
 
-const calulateShortest = () => {
-
+const calulateShortest = (neigh,selectedNode) => {
+  Object.keys(neigh).map(neighbour=>{
+    if(weights[neighbour]){
+      let currentWeight = weights[neighbour];
+      let parent = parentMap[neighbour];
+      console.log(parent);
+      let totalWeight = 0;
+      while(parent){
+        let tempNeigh =  graph[parent];
+        totalWeight+=tempNeigh[neighbour];
+        
+      }
+    }
+  })
 }
 
+
 const dijksta = (graph) => {
-  Object.keys(graph).map(node=>unvisited.push(node));
+  unvisited = Object.keys(graph);
+  unvisited.map(node=>weights[node]=Infinity)
+  unvisited.map(node=>parentMap[node]=null)
+
+  
+  let countTrack = 0; 
   while(unvisited.length!==0){
-    
+    let selectedNode = null;
+    if(countTrack===0){
+      selectedNode='start';
+      weights[selectedNode] = 0;
+    }
+    let neighbours = graph[selectedNode];
+    calulateShortest(neighbours,selectedNode);
+
+    unvisited.pop();
+    countTrack+=1;
   }
 }
 dijksta(graph);
