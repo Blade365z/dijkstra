@@ -34,7 +34,9 @@ var parentMap = {};
 //Functions to be implmeneted
 //calulateShortest()
 //Dijkstras()
-const calulateShortest = (neigh, selectedNode) => {
+Dijkstra(graph);
+
+function calulateShortest(neigh, selectedNode) {
   Object.keys(neigh).map(neighbour => {
     if (weights[neighbour]) {
       let currentWeight = weights[neighbour];
@@ -68,7 +70,7 @@ const calulateShortest = (neigh, selectedNode) => {
 }
 
 
-const dijksta = (graph) => {
+function Dijkstra(graph) {
   //Initalization
   let startNode = 'start';
   let finishNode = 'finish';
@@ -90,11 +92,13 @@ const dijksta = (graph) => {
       selectedNode = min.node;
     }
   }
+
   //Backtrack
-  let path = [finishNode];
+  //Validating if the destination is reachable or not.
   let parent = parentMap[finishNode];
-  let totalCost = weights[finishNode];
   if (parent) {
+    let path = [finishNode];
+    let totalCost = weights[finishNode];
     while (parent) {
       path.push(parent);
       totalCost += weights[parent];
@@ -108,4 +112,5 @@ const dijksta = (graph) => {
     console.log('Destination node unreachable!')
   }
 }
-dijksta(graph);
+
+
