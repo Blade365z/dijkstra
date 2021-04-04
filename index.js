@@ -16,49 +16,72 @@ console.log(graph)
 //weights - HashMap; Keeping track of the weights 
 //parentMap -Hashmap; Keeping track of the parents
 
-var unvisited = [];
+var visited = [];
 var weights = {};
 var parentMap = {};
 
 //Functions to be implmeneted
 //calulateShortest()
 //Dijkstras()
-
 const calulateShortest = (neigh,selectedNode) => {
   Object.keys(neigh).map(neighbour=>{
     if(weights[neighbour]){
       let currentWeight = weights[neighbour];
-      let parent = parentMap[neighbour];
-      console.log(parent);
+      let parent = selectedNode;
       let totalWeight = 0;
       while(parent){
-        let tempNeigh =  graph[parent];
+        let tempNeigh = graph[parent];
         totalWeight+=tempNeigh[neighbour];
-        
+        parent = parentMap[tempNeigh];
+      }
+      //Relaxation
+      if(totalWeight < currentWeight) {
+          weights[neighbour] = totalWeight;
+          parentMap[neighbour] = selectedNode;
+          parent = parentMap[parent];
       }
     }
   })
+  let min={
+    node:null,
+    cost:Infinity
+  };
+  Object.keys(weights).map(node=>{
+    if(weights[node]<min.cost && !visited.includes(node)){
+      min.cost = weights[node];
+      min.node = node
+    }
+  });
+  return min;
 }
 
 
 const dijksta = (graph) => {
-  unvisited = Object.keys(graph);
-  unvisited.map(node=>weights[node]=Infinity)
-  unvisited.map(node=>parentMap[node]=null)
-
-  
+  //Initalization
+  Object.keys(graph).map(node=>weights[node]=Infinity)
+  Object.keys(graph).map(node=>parentMap[node]=null)
+  let selectedNode = null;
   let countTrack = 0; 
-  while(unvisited.length!==0){
-    let selectedNode = null;
+
+
+  while(visited.length!==5){
     if(countTrack===0){
       selectedNode='start';
       weights[selectedNode] = 0;
+      let startNeighbours = graph[selectedNode];
+      Object.keys(startNeighbours).map(node=>{
+        parentMap[node]=selectedNode
+      })
     }
+    visited.push(selectedNode)
     let neighbours = graph[selectedNode];
-    calulateShortest(neighbours,selectedNode);
-
-    unvisited.pop();
+    if(neighbours){
+      let min = calulateShortest(neighbours,selectedNode);
+      selectedNode=min.node;
+    }
     countTrack+=1;
   }
+  console.log(weights)
+  console.log(parentMap);
 }
 dijksta(graph);
