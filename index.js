@@ -10,7 +10,7 @@ const graph = {
    finish: {}
   };
 
-console.log(graph)
+console.log('Graph: ',graph)
 
 //visited  - Array; Keeping track of all the visisted vertex
 //weights - HashMap; Keeping track of the weights 
@@ -42,6 +42,7 @@ const calulateShortest = (neigh,selectedNode) => {
       }
     }
   })
+  //Find the minimum weighted node in the current context
   let min={
     node:null,
     cost:Infinity
@@ -58,30 +59,38 @@ const calulateShortest = (neigh,selectedNode) => {
 
 const dijksta = (graph) => {
   //Initalization
+  let startNode = 'start';
+  let finishNode ='finish';
   Object.keys(graph).map(node=>weights[node]=Infinity)
   Object.keys(graph).map(node=>parentMap[node]=null)
-  let selectedNode = null;
-  let countTrack = 0; 
-
-
+  let selectedNode = startNode;
+  let startNeighbours = graph[selectedNode];
+  weights[selectedNode] = 0;
+  Object.keys(startNeighbours).map(node=>{
+    parentMap[node]=selectedNode
+  })
+  
+  //Analysing all nodes and computing the cost
   while(visited.length!==Object.entries(graph).length){
-    if(countTrack===0){
-      selectedNode='start';
-      weights[selectedNode] = 0;
-      let startNeighbours = graph[selectedNode];
-      Object.keys(startNeighbours).map(node=>{
-        parentMap[node]=selectedNode
-      })
-    }
     visited.push(selectedNode)
     let neighbours = graph[selectedNode];
     if(neighbours){
       let min = calulateShortest(neighbours,selectedNode);
       selectedNode=min.node;
     }
-    countTrack+=1;
   }
-  console.log(weights)
-  console.log(parentMap);
+//Backtrack
+let path=[finishNode];
+let parent = parentMap[finishNode];
+let totalCost = weights[finishNode];
+while(parent){
+  path.push(parent);
+  totalCost+=weights[parent];
+  parent = parentMap[parent];
+}
+console.log('Shortest Path: ',path.reverse().reduce((a,b)=>a+' -> '+b));
+console.log('Total Cost: ',totalCost);
+
+
 }
 dijksta(graph);
