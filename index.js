@@ -3,6 +3,7 @@
 // Adjacency List of a weighted graph
 
 
+
 const graph = {
   "0": {
     "1": 1,
@@ -13,133 +14,90 @@ const graph = {
     "6": 1
   },
   "2": {
-    "1": 1,
     "3": 1,
     "7": 1
   },
   "3": {
-    "2": 1,
     "4": 1,
     "8": 1
   },
   "4": {
-    "3": 1,
     "5": 1,
     "9": 1
   },
   "5": {
-    "4": 1,
     "6": 1,
     "10": 1
   },
   "6": {
-    "1": 1,
-    "5": 1,
     "7": 1,
     "11": 1
   },
   "7": {
-    "2": 1,
-    "6": 1,
     "8": 1,
     "12": 1
   },
   "8": {
-    "3": 1,
-    "7": 1,
     "9": 1,
     "13": 1
   },
   "9": {
-    "4": 1,
-    "8": 1,
     "10": 1,
     "14": 1
   },
   "10": {
-    "5": 1,
-    "9": 1,
     "11": 1,
     "15": 1
   },
   "11": {
-    "6": 1,
-    "10": 1,
     "12": 1,
     "16": 1
   },
   "12": {
-    "7": 1,
-    "11": 1,
     "13": 1,
     "17": 1
   },
   "13": {
-    "8": 1,
-    "12": 1,
     "14": 1,
     "18": 1
   },
   "14": {
-    "9": 1,
-    "13": 1,
     "15": 1,
     "19": 1
   },
   "15": {
-    "10": 1,
-    "14": 1,
     "16": 1,
     "20": 1
   },
   "16": {
-    "11": 1,
-    "15": 1,
     "17": 1,
     "21": 1
   },
   "17": {
-    "12": 1,
-    "16": 1,
     "18": 1,
     "22": 1
   },
   "18": {
-    "13": 1,
-    "17": 1,
     "19": 1,
     "23": 1
   },
   "19": {
-    "14": 1,
-    "18": 1,
     "20": 1,
     "24": 1
   },
   "20": {
-    "15": 1,
-    "19": 1,
     "21": 1
   },
   "21": {
-    "16": 1,
-    "20": 1,
     "22": 1
   },
   "22": {
-    "17": 1,
-    "21": 1,
     "23": 1
   },
   "23": {
-    "18": 1,
-    "22": 1,
     "24": 1
   },
-  "24": {
-    "19": 1,
-    "23": 1
-  }
+  "24": {}
 }
 
 console.log('Graph: ', graph)
@@ -169,7 +127,7 @@ function calulateShortest(neigh, selectedNode) {
         parent = parentMap[tempNeigh];
       }
       //Relaxation
-      if (totalWeight <= currentWeight) {
+      if (totalWeight < currentWeight) {
         weights[neighbour] = totalWeight;
         parentMap[neighbour] = selectedNode;
         parent = parentMap[parent];
@@ -177,7 +135,8 @@ function calulateShortest(neigh, selectedNode) {
     }
   })
   //Find the minimum weighted node in the current context
-  let min = {
+
+  var min = {
     node: null,
     cost: Infinity
   };
@@ -194,10 +153,9 @@ function calulateShortest(neigh, selectedNode) {
 function Dijkstra(graph) {
   //Initalization
   let startNode = "5";
-  let finishNode = "10";
+  let finishNode = "13";
   Object.keys(graph).map(node => weights[node] = Infinity)
   Object.keys(graph).map(node => parentMap[node] = null)
-
   let selectedNode = startNode;
   let startNeighbours = graph[selectedNode];
   weights[selectedNode] = 0;
@@ -206,7 +164,8 @@ function Dijkstra(graph) {
   })
   //Analysing all nodes and computing the cost
   // while (visited.length !== Object.entries(graph).length) {
-  //   visited.push(selectedNode)
+  //   if (!visited.includes(selectedNode))
+  //     visited.push(selectedNode)
   //   let neighbours = graph[selectedNode];
   //   if (neighbours) {
   //     let min = calulateShortest(neighbours, selectedNode);
@@ -214,15 +173,16 @@ function Dijkstra(graph) {
   //   }
   // }
   Object.keys(graph).forEach(node => {
-    visited.push(node);
+    if (!visited.includes(selectedNode))
+      visited.push(selectedNode)
     let neighbours = graph[selectedNode];
     if (neighbours) {
       let min = calulateShortest(neighbours, selectedNode);
       selectedNode = min.node;
     }
   })
-  console.log(parentMap)
   console.log(visited)
+
   //Backtrack
   //Validating if the destination is reachable or not.
   let parent = parentMap[finishNode];
